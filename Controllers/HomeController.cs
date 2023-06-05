@@ -1,21 +1,38 @@
 ﻿using CsdsShop.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using CsdsShop.Data;
+using CsdsShop.Services;
 
 namespace CsdsShop.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ConsignmentDbContext _context;
+        public HomeController(ILogger<HomeController> logger, 
+            ConsignmentDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var minioSvc = new MinioService();
+            var buckets = minioSvc.GetBuckets().Result;
+            var items = _context.Items
+                .OrderByDescending(i=>i.ListDate)
+                .Take(10)
+                .Select(i => new ItemListViewModel()
+                {
+                    Id = i.Id,
+                    Name = i.Name,
+                    Price = i.Price,
+                    ThumbnailUrl = "",
+                    Size = i.Size ?? ""
+                }).ToList();
+            return View(items);
         }
 
         public IActionResult Privacy()
