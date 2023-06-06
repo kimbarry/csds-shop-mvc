@@ -1,23 +1,30 @@
-﻿@model CsdsShop.Models.Item
+﻿@model CsdsShop.Models.ItemEditViewModel
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>Item</h4>
+<h1>Edit Item @Model.Id</h1>
+<img src="@Model.ImgUrl" class="img-fluid img-thumbnail" alt="">
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="ImgUrl" />
             <div class="form-group">
                 <label asp-for="SellerId" class="control-label"></label>
-                <select asp-for="SellerId" class="form-control" asp-items="ViewBag.SellerId"></select>
+                <select asp-for="SellerId" class="form-control" > 
+                    @foreach (var seller in ViewBag.Sellers)
+                    {
+                        <option value="@seller.Value">@seller.Value.ToString().PadLeft(3, '0'):@seller.Text</option>
+
+                    }
+                </select>
                 <span asp-validation-for="SellerId" class="text-danger"></span>
             </div>
+            
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -29,19 +36,14 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ImageUrl" class="control-label"></label>
-                <input asp-for="ImageUrl" class="form-control" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                <label asp-for="Image" class="control-label"></label>
+                <input  asp-for="Image"  class="form-control btn-secondary" />
+                <span asp-validation-for="Image" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Size" class="control-label"></label>
                 <input asp-for="Size" class="form-control" />
                 <span asp-validation-for="Size" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsSold" /> @Html.DisplayNameFor(model => model.IsSold)
-                </label>
             </div>
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
@@ -49,28 +51,22 @@
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CreditAmount" class="control-label"></label>
-                <input asp-for="CreditAmount" class="form-control" />
-                <span asp-validation-for="CreditAmount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="FeePercentage" class="control-label"></label>
                 <input asp-for="FeePercentage" class="form-control" />
                 <span asp-validation-for="FeePercentage" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ListDate" class="control-label"></label>
-                <input asp-for="ListDate" class="form-control" />
-                <span asp-validation-for="ListDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SaleDate" class="control-label"></label>
-                <input asp-for="SaleDate" class="form-control" />
-                <span asp-validation-for="SaleDate" class="text-danger"></span>
-            </div>
+            
             <div class="form-group">
                 <label asp-for="Category" class="control-label"></label>
-                <select asp-for="Category" class="form-control"></select>
+                <select asp-for="Category" class="form-control">
+                    @*TODO create viewbag for this dropdown*@
+                    <option value="1">Shoes</option>
+                    <option value="2">Dancewear</option>
+                    <option value="3">Costume</option>
+                    <option value="4">Accessories</option>
+                    <option value="5">CsdsMerch</option>
+                    <option value="99">Other</option>
+                </select>
                 <span asp-validation-for="Category" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -78,16 +74,22 @@
                     <input class="form-check-input" asp-for="Active" /> @Html.DisplayNameFor(model => model.Active)
                 </label>
             </div>
+             <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsSold" /> @Html.DisplayNameFor(model => model.IsSold)
+                </label>
+            </div>
+
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Submit" class="btn btn-primary" />
+@*                <a class="btn-primary btn" asp-action="Index">Back to List</a>
+*@
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

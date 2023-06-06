@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CsdsShop.Data;
 using CsdsShop.Models;
+using CsdsShop.Services;
 
 namespace CsdsShop.Controllers
 {
@@ -60,20 +61,16 @@ namespace CsdsShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                // TODO: Increment highest item id
-                // TODO: We can remove ImageUrl from item class
-                //       and dynamically build the "imageurl" based on the 
-                //       image id that the DB manages
-                var newId = (_context.Items.Max(i => i.Id) + 1)
-                    .ToString().PadLeft(4, '0');
+                var nextId = (_context.Items.Max(i => i.Id) + 1);
                 // TODO: Manipulate image -> thumb/cropped&resized main image
                 // TODO: Upload image to Minio
+                var minio = new MinioService();
+                minio.PutObj(dto.Image, dto.SellerId, nextId);
                 Item item = new Item()
                 {
                     SellerId = dto.SellerId,
                     Name = dto.Name,
                     Description = dto.Description,
-                    ImageUrl = newId + ".jpg",
                     Size = dto.Size,
                     Price = dto.Price,
                     ListDate = DateTime.Now,
@@ -102,7 +99,32 @@ namespace CsdsShop.Controllers
             {
                 return NotFound();
             }
-            return View(item);
+            // create seller list for dropdown
+            // add current seller to top of list
+            var sellers = new List<Seller>();
+            sellers.Add(await _context.Sellers.FindAsync(item.SellerId));
+            sellers.AddRange(_context.Sellers.Where(s => s.Id != item.SellerId));
+            ViewBag.Sellers = sellers.Select(s => new SelectListItem()
+            { 
+                Text = s.Name, 
+                Value = s.Id.ToString(),
+                Selected = s.Id == item.SellerId
+            });
+            var itemEditVm = new ItemEditViewModel()
+            {
+                Id = item.Id,
+                SellerId = item.SellerId,
+                Name = item.Name,
+                Description = item.Description,
+                Size = item.Size,
+                IsSold = item.IsSold,
+                Price = item.Price,
+                ImgUrl = "http://localhost:9000/images/" + item.SellerId + "-" + item.Id + ".jpeg",
+                FeePercentage = item.FeePercentage,
+                Category = item.Category,
+                Active = item.Active,
+            };
+            return View(itemEditVm);
         }
 
         // POST: Items/Edit/5
@@ -110,9 +132,9 @@ namespace CsdsShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,SellerId,Name,Description,ImageUrl,Size,IsSold,Price,CreditAmount,FeePercentage,ListDate,SaleDate,Category,Active")] Item item)
+        public async Task<IActionResult> Edit(int id, [FromForm] ItemEditViewModel itemVm)
         {
-            if (id != item.Id)
+            if (id != itemVm.Id)
             {
                 return NotFound();
             }
@@ -121,12 +143,39 @@ namespace CsdsShop.Controllers
             {
                 try
                 {
+                    // TODO: Upload image to Minio
+                    if (itemVm.Image != null)
+                    {
+                        var minio = new MinioService();
+                        minio.PutObj(itemVm.Image, itemVm.SellerId, itemVm.Id);
+                    }
+                    Item item = new Item()
+                    {
+                        Id = itemVm.Id,
+                        SellerId = itemVm.SellerId,
+                        Name = itemVm.Name,
+                        Description = itemVm.Description,
+                        Size = itemVm.Size,
+                        Price = itemVm.Price,
+                        Active = itemVm.Active,
+                        FeePercentage = itemVm.FeePercentage,
+                        Category =  itemVm.Category
+                    };
+                    if (itemVm.IsSold)
+                    {
+                        item.SaleDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        item.SaleDate = null;
+                    }
+                    
                     _context.Update(item);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ItemExists(item.Id))
+                    if (!ItemExists(id))
                     {
                         return NotFound();
                     }
@@ -137,7 +186,7 @@ namespace CsdsShop.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(item);
+            return View(itemVm);
         }
 
         // GET: Items/Delete/5

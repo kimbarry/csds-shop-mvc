@@ -19,14 +19,14 @@ namespace CsdsShop.Controllers
 
         public IActionResult Index()
         {
-            var minioSvc = new MinioService();
-            var buckets = minioSvc.GetBuckets().Result;
             var items = _context.Items
                 .OrderByDescending(i=>i.ListDate)
                 .Take(10)
                 .Select(i => new ItemListViewModel()
                 {
                     Id = i.Id,
+                    SellerId = i.SellerId,
+                    ImgUrl = "http://localhost:9000/images/" + i.SellerId + "-" + i.Id + ".jpeg",
                     Name = i.Name,
                     Price = i.Price,
                     ThumbnailUrl = "",
