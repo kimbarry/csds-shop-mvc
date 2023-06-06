@@ -6,35 +6,34 @@
 <div class="text-center">
     <h1 class="display-4">Most Recent Items</h1>
     <div class="container">
-	  <div class="row">
-		<div class="col-12">
-			<table class="table table-image">
-			  <thead>
-				<tr>
-				  <th scope="col">Id</th>
-				  <th scope="col">Thumbnail</th>
-				  <th scope="col">Name</th>
-				  <th scope="col">Price</th>
-				  <th scope="col">Size</th>
-				</tr>
-			  </thead>
-			  <tbody>
-						@foreach (var item in Model)
-						{
-							<tr  onclick="window.location='@Url.Action("Details", "Items", new {Id = item.Id})'">
-						
-							  <td>@item.Id</td>
-							  <td style="width: 12%;">
-								  <img src="@item.ImgUrl" class="img-fluid img-thumbnail" alt="">
-							  </td>
-							  <td>@item.Name</td>
-							  <td>@item.Price</td>
-							  <td>@item.Size</td>
-							</tr>
-						}
-			  </tbody>
-			</table>   
-		</div>
-	  </div>
-	</div>
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-image">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Thumbnail</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Size</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr onclick="window.location='@Url.Action("Details", "Items", new {Id = item.Id})'">
+                                <td>@item.Id</td>
+                                <td style="width: 12%;">
+                                    <img src="@item.ImgUrl" class="img-fluid img-thumbnail" alt="">
+                                </td>
+                                <td>@item.Name</td>
+                                <td>@item.Price</td>
+                                <td>@item.Size</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>

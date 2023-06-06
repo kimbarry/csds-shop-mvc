@@ -14,5 +14,22 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+  margin-bottom: 10px;
+}
+body {
+    background-color: #f8f9fa;
+}
+
+.container {
+    margin-top: 30px;
+}
+
+.table-image img {
+    max-width: 100px;
+    height: auto;
+}
+
+.table tbody tr:hover {
+    background-color: #e9ecef;
+    cursor: pointer;
 }

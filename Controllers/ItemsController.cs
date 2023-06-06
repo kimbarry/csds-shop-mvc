@@ -21,11 +21,22 @@ namespace CsdsShop.Controllers
         }
 
         // GET: Items
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-              return _context.Items != null ? 
-                          View(await _context.Items.ToListAsync()) :
-                          Problem("Entity set 'ConsignmentDbContext.Items'  is null.");
+            var items = _context.Items
+              .OrderByDescending(i => i.ListDate)
+              .Take(10)
+              .Select(i => new ItemListViewModel()
+              {
+                  Id = i.Id,
+                  SellerId = i.SellerId,
+                  ImgUrl = "http://localhost:9000/images/" + i.SellerId + "-" + i.Id + ".jpeg",
+                  Name = i.Name,
+                  Price = i.Price,
+                  ThumbnailUrl = "",
+                  Size = i.Size ?? ""
+              }).ToList();
+            return View(items);
         }
 
         // GET: Items/Details/5
@@ -43,7 +54,22 @@ namespace CsdsShop.Controllers
                 return NotFound();
             }
 
-            return View(item);
+            return base.View(new ItemDetailViewModel()
+            {
+                Id = item.Id,
+                SellerId = item.SellerId,
+                Name = item.Name,
+                Description = item.Description,
+                ListDate = item.ListDate.ToShortDateString(),
+                Size = item.Size,
+                Price = item.Price,
+                ImgUrl = GetImgUrl(item),
+                FeePercentage = item.FeePercentage,
+                Category = item.Category,
+                Active = item.Active,
+                IsSold = item.IsSold,
+                SoldDate = item.SaleDate == null ? "Not Sold" : item.SaleDate.Value.ToShortDateString()
+            });
         }
 
         // GET: Items/Create
@@ -119,7 +145,7 @@ namespace CsdsShop.Controllers
                 Size = item.Size,
                 IsSold = item.IsSold,
                 Price = item.Price,
-                ImgUrl = "http://localhost:9000/images/" + item.SellerId + "-" + item.Id + ".jpeg",
+                ImgUrl = GetImgUrl(item),
                 FeePercentage = item.FeePercentage,
                 Category = item.Category,
                 Active = item.Active,
@@ -229,6 +255,10 @@ namespace CsdsShop.Controllers
         private bool ItemExists(int id)
         {
           return (_context.Items?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+        private static string GetImgUrl(Item item)
+        {
+            return "http://localhost:9000/images/" + item.SellerId + "-" + item.Id + ".jpeg";
         }
     }
 }

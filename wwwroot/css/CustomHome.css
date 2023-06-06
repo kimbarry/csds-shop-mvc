@@ -1,0 +1,45 @@
+﻿/* Custom color scheme */
+:root {
+    --primary-color: #0c33cf; /* Blue */
+    --secondary-color: #fff; /* White */
+    --tertiary-color: #ccc; /* Grey */
+}
+
+/* Apply custom color scheme */
+body {
+    background-color: var(--secondary-color);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--primary-color);
+}
+
+.container {
+    margin-top: 20px;
+}
+
+.product-card {
+    background-color: var(--tertiary-color);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+    .product-card h5 {
+        color: var(--primary-color);
+    }
+
+    .product-card p {
+        color: var(--secondary-color);
+    }
+
+    .product-card .btn {
+        background-color: var(--primary-color);
+        color: var(--secondary-color);
+        border-color: var(--primary-color);
+    }
+
+        .product-card .btn:hover {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
