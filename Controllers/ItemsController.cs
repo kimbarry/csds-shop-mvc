@@ -170,23 +170,11 @@ namespace CsdsShop.Controllers
                 try
                 {
                     // TODO: Upload image to Minio
-                    if (itemVm.Image != null)
+                    if (VmHasImage(itemVm))
                     {
-                        var minio = new MinioService();
-                        minio.PutObj(itemVm.Image, itemVm.SellerId, itemVm.Id);
+                        UpdatItemImage(itemVm);
                     }
-                    Item item = new Item()
-                    {
-                        Id = itemVm.Id,
-                        SellerId = itemVm.SellerId,
-                        Name = itemVm.Name,
-                        Description = itemVm.Description,
-                        Size = itemVm.Size,
-                        Price = itemVm.Price,
-                        Active = itemVm.Active,
-                        FeePercentage = itemVm.FeePercentage,
-                        Category =  itemVm.Category
-                    };
+                    Item item = await MapEditViewModelToItem(itemVm);
                     if (itemVm.IsSold)
                     {
                         item.SaleDate = DateTime.Now;
@@ -195,7 +183,7 @@ namespace CsdsShop.Controllers
                     {
                         item.SaleDate = null;
                     }
-                    
+
                     _context.Update(item);
                     await _context.SaveChangesAsync();
                 }
@@ -213,6 +201,43 @@ namespace CsdsShop.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(itemVm);
+        }
+
+        private async Task<Item> MapEditViewModelToItem(ItemEditViewModel itemVm)
+        {
+            var existingItem = await _context.Items.FirstOrDefaultAsync(i => i.Id == itemVm.Id);
+
+            if (existingItem != null)
+            {
+                _context.Entry(existingItem).State = EntityState.Detached;//solved error where item w/ id already tracking 
+            }
+            return new Item()
+            {
+                Id = itemVm.Id,
+                SellerId = itemVm.SellerId,
+                Name = itemVm.Name,
+                Description = itemVm.Description,
+                Size = itemVm.Size,
+                Price = itemVm.Price,
+                Active = itemVm.Active,
+                FeePercentage = itemVm.FeePercentage,
+                Category = itemVm.Category,
+                ListDate = existingItem.ListDate,
+                IsSold = existingItem.IsSold,
+                CreditAmount = existingItem.CreditAmount,
+                SaleDate = existingItem.SaleDate
+            };
+        }
+
+        private static void UpdatItemImage(ItemEditViewModel itemVm)
+        {
+            var minio = new MinioService();
+            minio.PutObj(itemVm.Image, itemVm.SellerId, itemVm.Id);
+        }
+
+        private static bool VmHasImage(ItemEditViewModel itemVm)
+        {
+            return itemVm.Image != null;
         }
 
         // GET: Items/Delete/5

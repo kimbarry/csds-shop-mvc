@@ -4,70 +4,10 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
- <a class="btn-secondary btn" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> 
- <a class="btn-primary btn" asp-action="Index">Back to List</a>
- <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AccountToCredit)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CellNum)
-            </th>
-             <th>
-                @Html.DisplayNameFor(model => model.IsActive)
-            </th>
-             <th>
-                @Html.DisplayNameFor(model => model.Notes)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-
-        <tr>
-            <td>
-                @Html.DisplayFor(model => model.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(model => model.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(model => model.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(model => model.CellNum)
-            </td>
-            <td>
-                @Html.DisplayFor(model => model.IsActive)
-            </td>
-            <td>
-                @Html.DisplayFor(model => model.Notes)
-            </td>
-        </tr>
-
-    </tbody>
-</table>
+<h1>@Html.DisplayFor(model => model.Id)  @Html.DisplayFor(model => model.Name)</h1>
 
 
-
-
-
-
-
-
-@*<div>
+<div>
     <h4>Seller</h4>
     <hr />
     <dl class="row">
@@ -116,7 +56,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+ <a class="btn-secondary btn" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> 
+ <a class="btn-primary btn" asp-action="Index">Back to List</a>
 </div>
-*@
