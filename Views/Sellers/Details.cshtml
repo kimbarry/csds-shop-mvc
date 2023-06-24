@@ -4,7 +4,7 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>@Html.DisplayFor(model => model.Id)  @Html.DisplayFor(model => model.Name)</h1>
+<h1>@Html.DisplayFor(model => model.Id)     @Html.DisplayFor(model => model.Name)</h1>
 
 
 
@@ -13,19 +13,19 @@
         <dl class="col-6 row">
             
             <dt class = "col-sm-4">
-                @Html.DisplayNameFor(model => model.Email)
+                @Html.DisplayNameFor(model => model.Email):
             </dt>
             <dd class = "col-sm-8">
                 @Html.DisplayFor(model => model.Email)
             </dd>
              <dt class = "col-sm-4">
-                @Html.DisplayNameFor(model => model.CellNum)
+                Cell Number:
             </dt>
             <dd class = "col-sm-8">
                 @Html.DisplayFor(model => model.CellNum)
             </dd>
             <dt class = "col-sm-4">
-                @Html.DisplayNameFor(model => model.Notes)
+                @Html.DisplayNameFor(model => model.Notes):
             </dt>
             <dd class = "col-sm-8">
                 @Html.DisplayFor(model => model.Notes)
@@ -33,7 +33,7 @@
         </dl>
         <dl class="col-6 row">
             <dt class = "col-sm-6">
-                @Html.DisplayNameFor(model => model.AccountToCredit)
+                Account To Credit:
             </dt>
             <dd class = "col-sm-6">
                 @Html.DisplayFor(model => model.AccountToCredit)
