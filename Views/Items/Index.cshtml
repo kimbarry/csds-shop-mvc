@@ -12,8 +12,8 @@
 <table class="table">
     <thead>
         <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Thumbnail</th>
+            <th scope="col">Item Id</th>
+            <th scope="col">Photo</th>
             <th scope="col">Name</th>
             <th scope="col">Price</th>
             <th scope="col">Size</th>
@@ -39,11 +39,11 @@
                 @Html.DisplayFor(modelItem => item.Size)
             </td>
             <td>
-                <a class="btn btn-sm btn-secondary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                <br />
-                <a class="btn btn-sm btn-primary" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                <br />
-                <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a style="margin: 2px;" class="btn btn-sm btn-secondary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                
+                <a style="margin: 2px;" class="btn btn-sm btn-primary" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                
+                <a style="margin: 2px;" class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }
