@@ -28,8 +28,11 @@
                 @Html.DisplayNameFor(model => model.Notes):
             </dt>
             <dd class = "col-sm-8">
-                @Html.DisplayFor(model => model.Notes)
-            </dd>
+                @foreach(Note note in Model.Notes)
+                {
+                    <p>@note.Text</p>
+                }
+        </dd>
         </dl>
         <dl class="col-6 row">
             <dt class = "col-sm-6">

@@ -10,6 +10,6 @@
         public string? Email { get; set; }
         public bool? IsActive { get; set; }
         public string? CellNum { get; set; }
-        public string? Notes { get; set; }
+        public List<Note>? Notes { get; set; }
     }
 }

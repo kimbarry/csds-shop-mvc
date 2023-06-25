@@ -3,6 +3,7 @@ using System;
 using CsdsShop.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CsdsShop.Migrations
 {
     [DbContext(typeof(ConsignmentDbContext))]
-    partial class ConsignmentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230625172147_SellerNotes")]
+    partial class SellerNotes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.16");

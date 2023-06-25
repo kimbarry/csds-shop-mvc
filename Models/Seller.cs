@@ -18,7 +18,14 @@
         public bool? IsActive { get; set; }
         public string? CellNum { get; set; }
         public IEnumerable<Item>? ItemsList { get; set; }
-        public string? Notes { get; set; }
+        public List<Note>? Notes { get; set; } = new List<Note>();
 
+    }
+    
+    public class Note
+    {
+        public int Id { get; set; }
+        public string Text { get; set; }
+        public int  SellerId { get; set; }
     }
 }
